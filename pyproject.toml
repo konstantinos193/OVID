@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ovid"
+version = "0.1.0"
+description = "Local-first text-to-video generator (Ollama-style)"
+requires-python = ">=3.10"
+dependencies = [
+  "fastapi==0.115.0",
+  "uvicorn==0.30.6",
+  "pydantic==2.9.2",
+  "typer==0.12.5",
+  "diffusers==0.31.0",
+  "transformers==4.44.2",
+  "accelerate==0.34.2",
+  "safetensors==0.4.5",
+  "torch>=2.1.0",
+  "torchvision>=0.16.0",
+  "imageio==2.35.1",
+  "numpy==2.1.1",
+  "pillow==10.4.0",
+  "tqdm==4.66.5",
+]
+
+[project.scripts]
+ovid = "ovid.cli:app"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
