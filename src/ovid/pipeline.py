@@ -16,9 +16,14 @@ class VideoPipeline:
     def generate(
         self,
         prompt: str,
+        negative_prompt: Optional[str],
         out_path: Path,
         frames: int = 16,
         fps: int = 8,
+        width: int = 512,
+        height: int = 512,
+        steps: int = 20,
+        guidance: float = 7.5,
         seed: Optional[int] = None,
     ) -> Path:
         if self.model.pipeline != "animatediff":
@@ -26,14 +31,21 @@ class VideoPipeline:
                 f"Unsupported pipeline '{self.model.pipeline}'. "
                 "Set pipeline to 'animatediff' in model.json."
             )
-        return self._generate_animatediff(prompt, out_path, frames, fps, seed)
+        return self._generate_animatediff(
+            prompt, negative_prompt, out_path, frames, fps, width, height, steps, guidance, seed
+        )
 
     def _generate_animatediff(
         self,
         prompt: str,
+        negative_prompt: Optional[str],
         out_path: Path,
         frames: int,
         fps: int,
+        width: int,
+        height: int,
+        steps: int,
+        guidance: float,
         seed: Optional[int],
     ) -> Path:
         adapter_path = self.model.extra.get("adapter_path")
@@ -75,8 +87,11 @@ class VideoPipeline:
         output = pipe(
             prompt=prompt,
             num_frames=frames,
-            guidance_scale=7.5,
-            num_inference_steps=20,
+            negative_prompt=negative_prompt,
+            guidance_scale=guidance,
+            num_inference_steps=steps,
+            width=width,
+            height=height,
             generator=generator,
         )
         vid_frames = output.frames[0]

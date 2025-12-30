@@ -31,6 +31,11 @@ def generate(
     out: Path | None = None,
     frames: int = 16,
     fps: int = 8,
+    width: int = 512,
+    height: int = 512,
+    steps: int = 20,
+    guidance: float = 7.5,
+    negative: str | None = None,
     seed: int | None = None,
 ) -> None:
     models = list_models()
@@ -51,9 +56,14 @@ def generate(
         pipeline = VideoPipeline(model_spec)
         pipeline.generate(
             prompt=prompt,
+            negative_prompt=negative,
             out_path=out_path,
             frames=frames,
             fps=fps,
+            width=width,
+            height=height,
+            steps=steps,
+            guidance=guidance,
             seed=seed,
         )
     except RuntimeError as exc:
