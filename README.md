@@ -38,6 +38,48 @@ Example `model.json`:
 }
 ```
 
+## Model Registry + Pull (Checksums)
+Copy `registry.example.json` to `registry.json` (or set `OVID_REGISTRY`).
+Each file requires a SHA256 checksum. Existing files are reused if the checksum matches.
+
+Example `registry.json`:
+```json
+{
+  "models": {
+    "animatediff-adapter": {
+      "dir": "animatediff-adapter",
+      "files": [
+        {
+          "url": "https://example.com/diffusion_pytorch_model.fp16.safetensors",
+          "sha256": "REPLACE_WITH_SHA256",
+          "path": "diffusion_pytorch_model.fp16.safetensors"
+        },
+        {
+          "url": "https://example.com/config.json",
+          "sha256": "REPLACE_WITH_SHA256",
+          "path": "config.json"
+        }
+      ]
+    }
+  }
+}
+```
+
+List registry entries:
+```powershell
+.\.venv\Scripts\ovid.exe registry
+```
+
+Pull a model:
+```powershell
+.\.venv\Scripts\ovid.exe pull animatediff-adapter
+```
+
+Compute SHA256 (Windows):
+```powershell
+certutil -hashfile path\to\file SHA256
+```
+
 ## Run (Web UI)
 Start the server:
 ```powershell
@@ -79,9 +121,14 @@ Body:
 ```json
 {
   "prompt": "a neon city at night",
+  "negative_prompt": "blurry, low quality",
   "model": "animatediff-local",
   "frames": 16,
   "fps": 8,
+  "width": 512,
+  "height": 288,
+  "steps": 20,
+  "guidance": 7.5,
   "seed": 42
 }
 ```
@@ -104,7 +151,6 @@ GET /outputs/{filename}
 - The pipeline backend depends on `pipeline` in `model.json`.
 
 ## Roadmap
-- Model pull/caching with checksums.
 - Multiple backends (diffusers, comfy, custom).
 - Video upscaling and post-processing.
 - Web UI.

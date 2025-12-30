@@ -4,7 +4,7 @@ import uvicorn
 
 from .config import load_settings
 from .pipeline import VideoPipeline
-from .registry import list_models, get_model
+from .registry import list_models, get_model, list_remote_models, pull_model
 
 app = typer.Typer(add_completion=False)
 
@@ -17,6 +17,26 @@ def models() -> None:
         raise typer.Exit(code=1)
     for model in items.values():
         typer.echo(f"{model.name} ({model.pipeline}) -> {model.path}")
+
+
+@app.command()
+def registry() -> None:
+    items = list_remote_models()
+    if not items:
+        typer.echo("No registry found. Create registry.json or set OVID_REGISTRY.")
+        raise typer.Exit(code=1)
+    for model in items.values():
+        typer.echo(f"{model.name} -> {model.dir} ({len(model.files)} files)")
+
+
+@app.command()
+def pull(name: str, force: bool = False) -> None:
+    try:
+        target = pull_model(name, force=force)
+    except RuntimeError as exc:
+        typer.echo(str(exc))
+        raise typer.Exit(code=1) from exc
+    typer.echo(f"Pulled {name} into {target}")
 
 
 @app.command()

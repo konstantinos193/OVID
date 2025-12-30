@@ -1,0 +1,19 @@
+{
+  "models": {
+    "animatediff-adapter": {
+      "dir": "animatediff-adapter",
+      "files": [
+        {
+          "url": "https://example.com/diffusion_pytorch_model.fp16.safetensors",
+          "sha256": "REPLACE_WITH_SHA256",
+          "path": "diffusion_pytorch_model.fp16.safetensors"
+        },
+        {
+          "url": "https://example.com/config.json",
+          "sha256": "REPLACE_WITH_SHA256",
+          "path": "config.json"
+        }
+      ]
+    }
+  }
+}

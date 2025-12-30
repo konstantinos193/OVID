@@ -10,7 +10,7 @@ __pycache__/
 dist/
 build/
 outputs/
-models/
 .env
 *.log
 *.mp4
+registry.json
