@@ -30,7 +30,10 @@ def registry() -> None:
 
 
 @app.command()
-def pull(name: str, force: bool = False) -> None:
+def pull(
+    name: str,
+    force: bool = typer.Option(False, "--force", help="Re-download files even if cached"),
+) -> None:
     try:
         target = pull_model(name, force=force)
     except RuntimeError as exc:
